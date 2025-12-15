@@ -1,0 +1,383 @@
+/**
+ * Flashcard Manager - Frontend Styles
+ * Uses CSS variables for full customization
+ * BULLETPROOF OVERFLOW PROTECTION
+ */
+
+/* Container - uses CSS variables from inline styles */
+.fcardm-flashcards {
+    /* Default values - overridden by inline styles */
+    --fcardm-height: 300px;
+    --fcardm-font-size: 18px;
+    --fcardm-front-start: #667eea;
+    --fcardm-front-end: #764ba2;
+    --fcardm-back-start: #11998e;
+    --fcardm-back-end: #38ef7d;
+    --fcardm-text-color: #ffffff;
+    --fcardm-button-color: #4361ee;
+    --fcardm-radius: 16px;
+    --fcardm-width: 100%;
+    --fcardm-max-width: 800px;
+    --fcardm-card-padding: 30px;
+    --fcardm-container-padding: 0px;
+    --fcardm-container-margin: 20px;
+    --fcardm-text-align: center;
+    
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    width: var(--fcardm-width);
+    max-width: var(--fcardm-max-width);
+    margin: var(--fcardm-container-margin) auto;
+    padding: var(--fcardm-container-padding);
+    box-sizing: border-box;
+    overflow: hidden; /* STRICT: Never overflow container */
+}
+
+.fcardm-flashcards *,
+.fcardm-flashcards *::before,
+.fcardm-flashcards *::after {
+    box-sizing: border-box;
+}
+
+/* Title */
+.fcardm-title {
+    text-align: var(--fcardm-text-align);
+    font-size: 1.4em;
+    margin: 0 0 10px;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Counter */
+.fcardm-counter {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin: 10px 0;
+    padding: 5px 0;
+}
+
+.fcardm-current {
+    font-weight: 700;
+    color: var(--fcardm-button-color);
+}
+
+/* Cards Wrapper - STRICT CLIPPING */
+.fcardm-cards-wrapper {
+    position: relative;
+    width: 100%;
+    height: var(--fcardm-height);
+    perspective: 1000px;
+    margin-bottom: 15px;
+    overflow: hidden !important; /* STRICT: Never overflow */
+    border-radius: var(--fcardm-radius); /* Match card radius for clean clipping */
+}
+
+/* Individual Card - STRICT BOUNDARIES */
+.fcardm-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    overflow: hidden !important; /* STRICT: Never overflow */
+}
+
+.fcardm-card.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.fcardm-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    overflow: hidden !important; /* STRICT: Never overflow */
+}
+
+.fcardm-card.flipped .fcardm-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Card Faces - STRICT BOUNDARIES */
+.fcardm-card-front,
+.fcardm-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--fcardm-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Changed from center to allow scrolling */
+    align-items: center;
+    padding: var(--fcardm-card-padding);
+    padding-bottom: 45px; /* Space for hint */
+    box-sizing: border-box;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    color: var(--fcardm-text-color);
+    overflow: hidden !important; /* STRICT: Never overflow */
+}
+
+.fcardm-card-front {
+    background: linear-gradient(135deg, var(--fcardm-front-start) 0%, var(--fcardm-front-end) 100%);
+}
+
+.fcardm-card-back {
+    background: linear-gradient(135deg, var(--fcardm-back-start) 0%, var(--fcardm-back-end) 100%);
+    transform: rotateY(180deg);
+}
+
+/* Card Content - SCROLLABLE WITH STRICT BOUNDARIES */
+.fcardm-card-content {
+    font-size: var(--fcardm-font-size);
+    line-height: 1.6;
+    text-align: var(--fcardm-text-align);
+    
+    /* STRICT TEXT WRAPPING - NEVER OVERFLOW HORIZONTALLY */
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    
+    /* STRICT SCROLLING - VERTICAL ONLY */
+    overflow-x: hidden !important;
+    overflow-y: auto;
+    
+    /* STRICT SIZE CONSTRAINTS */
+    max-height: calc(var(--fcardm-height) - var(--fcardm-card-padding) - 60px);
+    max-width: 100% !important;
+    width: 100%;
+    
+    /* Center content vertically when short */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 50px;
+    
+    padding: 10px 5px;
+    box-sizing: border-box;
+}
+
+/* Custom scrollbar for card content */
+.fcardm-card-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.fcardm-card-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+}
+
+.fcardm-card-content::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+}
+
+.fcardm-card-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.6);
+}
+
+/* Fade effect at bottom when content is scrollable */
+.fcardm-card-front::after,
+.fcardm-card-back::after {
+    content: '';
+    position: absolute;
+    bottom: 35px;
+    left: var(--fcardm-card-padding);
+    right: var(--fcardm-card-padding);
+    height: 30px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.fcardm-card-front::after {
+    background: linear-gradient(to bottom, transparent, var(--fcardm-front-end));
+}
+
+.fcardm-card-back::after {
+    background: linear-gradient(to bottom, transparent, var(--fcardm-back-end));
+}
+
+/* Hint text */
+.fcardm-card-hint {
+    position: absolute;
+    bottom: 12px;
+    left: var(--fcardm-card-padding);
+    right: var(--fcardm-card-padding);
+    text-align: center;
+    font-size: 11px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Controls */
+.fcardm-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.fcardm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f0f0f0;
+    color: #333;
+    font-family: inherit;
+}
+
+.fcardm-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.fcardm-btn:active {
+    transform: translateY(0);
+}
+
+.fcardm-btn:focus {
+    outline: 2px solid var(--fcardm-button-color);
+    outline-offset: 2px;
+}
+
+.fcardm-btn svg {
+    flex-shrink: 0;
+}
+
+.fcardm-prev,
+.fcardm-next {
+    background: var(--fcardm-button-color);
+    color: #fff;
+}
+
+.fcardm-prev:hover,
+.fcardm-next:hover {
+    filter: brightness(0.9);
+    background: var(--fcardm-button-color);
+}
+
+.fcardm-shuffle {
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.fcardm-shuffle:hover {
+    background: var(--fcardm-button-color);
+    color: #fff;
+}
+
+/* Progress Bar */
+.fcardm-progress {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.fcardm-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--fcardm-front-start), var(--fcardm-front-end));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Error Message */
+.fcardm-error {
+    text-align: center;
+    padding: 20px;
+    background: #fef2f2;
+    color: #dc2626;
+    border-radius: 8px;
+    border-left: 4px solid #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .fcardm-flashcards {
+        --fcardm-card-padding: 20px;
+    }
+    
+    .fcardm-card-content {
+        font-size: calc(var(--fcardm-font-size) * 0.9);
+    }
+    
+    .fcardm-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .fcardm-btn span {
+        display: none;
+    }
+    
+    .fcardm-shuffle {
+        padding: 8px;
+    }
+    
+    .fcardm-controls {
+        gap: 8px;
+    }
+}
+
+/* Animation for shuffle */
+@keyframes fcardm-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-3deg); }
+    40% { transform: translateX(8px) rotate(3deg); }
+    60% { transform: translateX(-8px) rotate(-3deg); }
+    80% { transform: translateX(8px) rotate(3deg); }
+}
+
+.fcardm-cards-wrapper.shuffling {
+    animation: fcardm-shake 0.5s ease-in-out;
+}
+
+/* Print styles */
+@media print {
+    .fcardm-controls,
+    .fcardm-progress,
+    .fcardm-card-hint {
+        display: none !important;
+    }
+    
+    .fcardm-card {
+        position: relative !important;
+        opacity: 1 !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+    
+    .fcardm-cards-wrapper {
+        height: auto !important;
+    }
+}
